@@ -1,32 +1,24 @@
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+
 export default function MessageForm() {
   return (
     <div className="card fixed-bottom text-white bg-dark">
       <div className="card-body">
         <div className="container">
-          <form id="message-form">
-            <div className="form-group">
-              <label>Auteur</label>
-              <input
-                type="text"
-                className="form-control form-control-sm"
-                id="author"
-                name="username"
-                placeholder="Auteur"
-              />
-            </div>
-            <div className="form-group">
-              <label>Message</label>
-              <textarea
-                className="form-control form-control-sm"
-                id="message"
-                name="message"
-                rows={2}
-              ></textarea>
-            </div>
-            <button type="submit" className="btn btn-sm btn-block btn-primary">
+          <Form id="message-form">
+            <Form.Group controlId="username">
+              <Form.Label>Auteur</Form.Label>
+              <Form.Control size="sm" placeholder="Auteur" />
+            </Form.Group>
+            <Form.Group controlId="message">
+              <Form.Label>Message</Form.Label>
+              <Form.Control as="textarea" rows={2} />
+            </Form.Group>
+            <Button variant="primary" size="sm" type="submit" block>
               Envoyer
-            </button>
-          </form>
+            </Button>
+          </Form>
         </div>
       </div>
     </div>
