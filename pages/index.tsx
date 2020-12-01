@@ -40,7 +40,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Create Next App</title>
+        <title>Forum de discussion - Mines Nancy 2020</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <nav className="navbar navbar-expand-lg navbar-light bg-light sticky-top">
