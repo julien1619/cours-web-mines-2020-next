@@ -27,7 +27,9 @@ async function fetchMessages() {
 }
 
 export default function Home() {
-  const { data, error } = useSWR("/messages", fetchMessages);
+  const { data, error } = useSWR("/messages", fetchMessages, {
+    refreshInterval: 1000,
+  });
 
   if (error != null) {
     return <div>{error}</div>;
