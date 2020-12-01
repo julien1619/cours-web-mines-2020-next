@@ -2,6 +2,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { ChangeEvent, SyntheticEvent, useState } from "react";
 import ky from "ky/umd";
+import { mutate } from "swr";
 
 type MessageCreation = {
   username: string;
@@ -49,7 +50,13 @@ export default function MessageForm() {
     // POST https://ensmn.herokuapp.com/messages (username, message)
     ky.post("https://ensmn.herokuapp.com/messages", {
       json: state,
-    }).then(() => setMessage(""));
+    }).then(() => {
+      // Force refresh messages
+      mutate("/messages");
+
+      // Clear message textarea
+      setMessage("");
+    });
   };
 
   return (
