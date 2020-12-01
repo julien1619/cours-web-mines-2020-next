@@ -1,8 +1,4 @@
-type MessageData = {
-  author: string;
-  content: string;
-  timestamp: number;
-};
+import { MessageData } from "../types/messages";
 
 type Props = {
   message: MessageData;

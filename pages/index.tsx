@@ -1,62 +1,42 @@
 import Head from "next/head";
+import useSWR from "swr";
+import ky from "ky/umd";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { MessageData } from "../types/messages";
 import Messages from "../components/Messages";
 import MessageForm from "../components/MessageForm";
 
-const messages = [
-  {
-    author: "Julien",
-    content: "Test",
-    timestamp: 1606810676109,
-  },
-  {
-    author: "Julien",
-    content: "Test 2",
-    timestamp: 1606810681302,
-  },
-  {
-    author: "Julien",
-    content: "Test 3",
-    timestamp: 1606811023118,
-  },
-  {
-    author: "Julien",
-    content: "Test 4",
-    timestamp: 1606816235882,
-  },
-  {
-    author: "",
-    content: "",
-    timestamp: 1606816306875,
-  },
-  {
-    author: "teo",
-    content: "Message test",
-    timestamp: 1606816322840,
-  },
-  {
-    author: "Yohan",
-    content: "Ca marche ?",
-    timestamp: 1606816367947,
-  },
-  {
-    author: "Zac",
-    content: "bonjour",
-    timestamp: 1606816406547,
-  },
-  {
-    author: "Zac",
-    content: "ah en effet ça marche :)",
-    timestamp: 1606816435302,
-  },
-  {
-    author: "Yohan",
-    content: "Slt",
-    timestamp: 1606816445335,
-  },
-];
+async function fetchMessages() {
+  let pageIndex = 0;
+  let hasMessages = true;
+  let messages: MessageData[] = [];
+
+  while (hasMessages) {
+    // GET https://ensmn.herokuapp.com/messages
+    // eslint-disable-next-line
+    const pageMessages: MessageData[] = await ky
+      .get(`https://ensmn.herokuapp.com/messages?page=${pageIndex}`)
+      .json();
+
+    hasMessages = pageMessages.length > 0;
+    pageIndex += 1;
+    messages = messages.concat(pageMessages);
+  }
+
+  return { messages: messages.reverse() };
+}
 
 export default function Home() {
+  const { data, error } = useSWR("/messages", fetchMessages);
+
+  if (error != null) {
+    return <div>{error}</div>;
+  }
+
+  if (data == null) {
+    return <div>Chargement en cours...</div>;
+  }
+
   return (
     <>
       <Head>
@@ -68,7 +48,7 @@ export default function Home() {
       </nav>
       <div className="container-fluid">
         <div className="container">
-          <Messages messages={messages} />
+          <Messages messages={data.messages} />
         </div>
 
         <MessageForm />
